@@ -13,6 +13,10 @@ inputs:
   environment-prefix:
     description: 'Prefix of the GitHub Deployment Environment. The PR number will be appended to this value.'
     required: false
+  website-url-template:
+    description: 'A template to create a custom website url instead of the bucket name'
+    required: false
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
