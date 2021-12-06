@@ -100,7 +100,8 @@ bucket-prefix | Prefix to the S3 bucket name. This should be the same value as t
 ### Optional Parameters
 Parameter | Description
 ------------ | -------------
-environment-prefix | Prefix to the GitHub Deployment. Defaults to 'PR-'
+environment-prefix   | Prefix to the GitHub Deployment. Defaults to 'PR-'
+website-url-template | Generate custom address instead of bucket url. Ex.: `http://%prNumber%.mydomain.com`. Supported vars: `prNumber`.
 
 # IAM 🔐
 
