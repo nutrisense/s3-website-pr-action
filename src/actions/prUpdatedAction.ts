@@ -74,10 +74,13 @@ export default async (bucketName: string, uploadDirectory: string, environmentPr
 };
 
 function buildWebsiteUrl(bucketName: string, websiteUrlTemplate: string, prNumber: number) {
-  if(!websiteUrlTemplate) {
-    return `http://${bucketName}.s3-website-us-east-1.amazonaws.com`;
-  }
+  console.log('Website URL template: ', websiteUrlTemplate)
   return websiteUrlTemplate.replace('%prNumber%', `${prNumber}`);
+  // console.log('Website URL Template found: ', websiteUrlTemplate)
+  // if(websiteUrlTemplate) {
+  // }
+  // return `http://${bucketName}.s3-website-us-east-1.amazonaws.com`;
+  
 }
 
 function isSuccessResponse(
