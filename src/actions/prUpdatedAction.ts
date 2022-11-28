@@ -13,7 +13,7 @@ export const requiredEnvVars = [
   'GITHUB_TOKEN',
 ];
 
-export default async (bucketName: string, uploadDirectory: string, environmentPrefix: string, websiteUrlTemplate: string) => {
+export default async (bucketName: string, folderName: string, uploadDirectory: string, environmentPrefix: string, websiteUrlTemplate: string) => {
   const prNumber = github.context.payload.pull_request!.number;
   const websiteUrl = buildWebsiteUrl(bucketName, websiteUrlTemplate, prNumber)
   const { repo } = github.context;
@@ -41,6 +41,24 @@ export default async (bucketName: string, uploadDirectory: string, environmentPr
     console.log('S3 Bucket already exists. Skipping creation...');
   }
 
+  // const folderExists = await checkFolderExists(bucketName, folderName);
+  //
+  // if (!folderExists) {
+  //   console.log('folder in S3 bucket does not exist. Creating...');
+  //   await S3.createBucket({ Bucket: bucketName }).promise();
+  //
+  //   console.log('Configuring bucket website...');
+  //   await S3.putBucketWebsite({
+  //     Bucket: bucketName,
+  //     WebsiteConfiguration: {
+  //       IndexDocument: { Suffix: 'index.html' },
+  //       ErrorDocument: { Key: 'index.html' },
+  //     },
+  //   }).promise();
+  // } else {
+  //   console.log('folder in S3 Bucket already exists. Skipping creation...');
+  // }
+
   await deactivateDeployments(repo, environmentPrefix);
 
   const deployment = await githubClient.repos.createDeployment({
@@ -60,7 +78,7 @@ export default async (bucketName: string, uploadDirectory: string, environmentPr
     });
 
     console.log('Uploading files...');
-    await s3UploadDirectory(bucketName, uploadDirectory);
+    await s3UploadDirectory(bucketName, folderName, uploadDirectory);
 
     await githubClient.repos.createDeploymentStatus({
       ...repo,

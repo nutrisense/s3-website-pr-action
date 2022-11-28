@@ -5,15 +5,15 @@ import prUpdatedAction from './actions/prUpdatedAction';
 
 const main = async () => {
   try {
-    const bucketPrefix = core.getInput('bucket-prefix');
+    const bucketName = core.getInput('bucket-name');
     const folderToCopy = core.getInput('folder-to-copy');
     const environmentPrefix = core.getInput('environment-prefix');
     const websiteUrlTemplate = core.getInput('website-url-template')
 
     const prNumber = github.context.payload.pull_request!.number;
-    const bucketName = `${bucketPrefix}-pr${prNumber}`;
+    const folderName = `pr${prNumber}/`;
 
-    console.log(`Bucket Name: ${bucketName}`);
+    console.log(`Folder Name: ${folderName}`);
 
     const githubActionType = github.context.payload.action;
 
@@ -22,11 +22,11 @@ const main = async () => {
         case 'opened':
         case 'reopened':
         case 'synchronize':
-          await prUpdatedAction(bucketName, folderToCopy, environmentPrefix, websiteUrlTemplate);
+          await prUpdatedAction(bucketName, folderName, folderToCopy, environmentPrefix, websiteUrlTemplate);
           break;
 
         case 'closed':
-          await prClosedAction(bucketName, environmentPrefix);
+          await prClosedAction(bucketName, folderName, environmentPrefix);
           break;
 
         default:
