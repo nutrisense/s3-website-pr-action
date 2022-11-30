@@ -8860,8 +8860,6 @@ exports.default = (bucketName) => __awaiter(void 0, void 0, void 0, function* ()
         return true;
     }
     catch (e) {
-        console.log('headBucket error');
-        console.log(e);
         return false;
     }
 });

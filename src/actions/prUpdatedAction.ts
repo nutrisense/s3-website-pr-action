@@ -41,24 +41,6 @@ export default async (bucketName: string, folderName: string, uploadDirectory: s
     console.log('S3 Bucket already exists. Skipping creation...');
   }
 
-  // const folderExists = await checkFolderExists(bucketName, folderName);
-  //
-  // if (!folderExists) {
-  //   console.log('folder in S3 bucket does not exist. Creating...');
-  //   await S3.createBucket({ Bucket: bucketName }).promise();
-  //
-  //   console.log('Configuring bucket website...');
-  //   await S3.putBucketWebsite({
-  //     Bucket: bucketName,
-  //     WebsiteConfiguration: {
-  //       IndexDocument: { Suffix: 'index.html' },
-  //       ErrorDocument: { Key: 'index.html' },
-  //     },
-  //   }).promise();
-  // } else {
-  //   console.log('folder in S3 Bucket already exists. Skipping creation...');
-  // }
-
   await deactivateDeployments(repo, environmentPrefix);
 
   const deployment = await githubClient.repos.createDeployment({
