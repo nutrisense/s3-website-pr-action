@@ -7,7 +7,7 @@ import deleteDeployments from "../utils/deleteDeployments";
 
 export const requiredEnvVars = ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'];
 
-export default async (bucketName: string, environmentPrefix: string) => {
+export default async (bucketName: string, folderName: string, environmentPrefix: string) => {
   const { repo } = github.context;
 
   validateEnvVars(requiredEnvVars);
@@ -15,7 +15,7 @@ export default async (bucketName: string, environmentPrefix: string) => {
   console.log('Emptying S3 bucket...');
 
   console.log('Fetching objects...');
-  const objects = await S3.listObjectsV2({ Bucket: bucketName }).promise();
+  const objects = await S3.listObjectsV2({ Bucket: bucketName, Prefix: folderName }).promise();
 
   if (objects.Contents && objects.Contents.length >= 1) {
     const deleteParams: DeleteObjectsRequest = {
@@ -32,14 +32,11 @@ export default async (bucketName: string, environmentPrefix: string) => {
     console.log('Deleting objects...');
     await S3.deleteObjects(deleteParams).promise();
   } else {
-    console.log('S3 bucket already empty.');
+    console.log('S3 bucket folder already empty.');
   }
-
-  await S3.deleteBucket({ Bucket: bucketName }).promise();
-
 
   await deactivateDeployments(repo, environmentPrefix);
   await deleteDeployments(repo, environmentPrefix)
 
-  console.log('S3 bucket removed');
+  console.log('S3 bucket folder removed');
 };
